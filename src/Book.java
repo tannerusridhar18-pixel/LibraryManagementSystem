@@ -41,6 +41,14 @@ public class Book {
         return available;
     }
 
+    public void borrowBook() {
+        available = false;
+    }
+
+    public void returnBook() {
+        available = true;
+    }
+
     @Override
     public String toString() {
         return "Book {" +
