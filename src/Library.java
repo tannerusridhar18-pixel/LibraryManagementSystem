@@ -11,7 +11,8 @@ public class Library {
         books.add(book);
     }
 
-    public void removeBook(Book book) {
+    public void removeBook(long bookId) {
+        Book book = findBookById(bookId);
         if (book != null) {
             books.remove(book);
             System.out.println("Book removed successfully.");
