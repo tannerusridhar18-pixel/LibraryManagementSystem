@@ -1,4 +1,7 @@
+package app;
 import java.util.Scanner;
+
+import model.Book;
 public class LibraryApp {
     public static void displayMenu() {
         System.out.println("\nLibrary Management System");
