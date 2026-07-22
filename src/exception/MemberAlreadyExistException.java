@@ -1,7 +1,7 @@
 package exception;
 
-public class MemberExistException extends Exception {
-    public MemberExistException(String messgae){
+public class MemberAlreadyExistException extends Exception {
+    public MemberAlreadyExistException(String messgae){
         super(messgae);
     }
 }

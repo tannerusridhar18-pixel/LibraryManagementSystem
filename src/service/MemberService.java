@@ -3,44 +3,40 @@ package service;
 import exception.MemberNotFoundException;
 import exception.MemberAlreadyExistException;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import model.Member;
 
 public class MemberService {
-    private ArrayList<Member> members;
+    private HashMap<Long, Member> members;
 
     public MemberService(){
-        members = new ArrayList<>();
+        members = new HashMap<>();
     }
 
-    private boolean memberExist(long memberId){
-        for(Member member : members){
-            if(member.getMemberId() == memberId)
-                return true;
-        }
-        return false;
+    public boolean memberExists(long memberId){
+        return members.containsKey(memberId);
     }
 
     public void addMember(Member member) throws MemberAlreadyExistException {
         if(member == null){
             throw new IllegalArgumentException("Member cannot be null");
         }
-        if(memberExist(member.getMemberId())){
-            throw new MemberAlreadyExistException("Member of ID: " + member.getMemberId() + "already exist." );
+        if(memberExists(member.getMemberId())){
+            throw new MemberAlreadyExistException("Member of ID: " + member.getMemberId() + " already exist." );
         }
-        members.add(member);
+        members.put(member.getMemberId(), member);
     }
 
     public void removeMember(long memberId) throws MemberNotFoundException{
         Member member = findMemberById(memberId);
-        members.remove(member);
+        members.remove(member.getMemberId());
     }
 
     public void displayMembers(){
         if(members.isEmpty()){
             System.out.println("No members found in the Library");
         } else {
-            for(Member member : members){
+            for(Member member : members.values()){
                 System.out.print(member);
             }
         }
@@ -48,13 +44,12 @@ public class MemberService {
 
     public Member findMemberById(long memberid) throws MemberNotFoundException {
 
-        for(Member member : members){
-            if(member.getMemberId() == memberid){
-                return member;
-            }
+        Member member = members.get(memberid);
+        if (member == null) {
+            throw new MemberNotFoundException("Member with Id: "+memberid + " not found.");
         }
-        
-        throw new MemberNotFoundException("Member with Id:"+memberid + "not found.");
+        return member;
+            
     }
 
 }

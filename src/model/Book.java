@@ -55,6 +55,14 @@ public class Book {
         return availableQuantity > 0;
     }
 
+    public long getAvailableQuantity(){
+        return availableQuantity;
+    }
+
+    public long getTotalQuantity(){
+        return totalQuantity;
+    }
+
     public void borrowBook() throws BookOperationException {
 
         if (availableQuantity <= 0) {

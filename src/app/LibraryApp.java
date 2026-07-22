@@ -15,7 +15,7 @@ public class LibraryApp {
     }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        LibraryService library = new LibraryService();
+        BookService library = new BookService();
         while(true) {
             displayMenu();
             System.out.print("Enter your choice: ");

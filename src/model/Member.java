@@ -78,6 +78,7 @@ public class Member {
                 ", \nname='" + name + '\'' +
                 ", \nemail='" + email + '\'' +
                 ", \nphoneNumber='" + phoneNumber + '\'' +
-                '}';
+                "\n}\n" +
+                "------------------------------------------------";
     }
 }

@@ -1,37 +1,36 @@
 package service;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import exception.BookAlreadyExistsException;
 import exception.BookNotFoundException;
 import exception.BookOperationException;
 import model.Book;
 
-public class LibraryService {
-    private ArrayList<Book> books;
+public class BookService {
+    private HashMap<Long, Book> books;
 
-    public LibraryService() {
-        books = new ArrayList<>();
+    public BookService() {
+        books = new HashMap<>();
     }
 
     private boolean bookExists(long bookId) {
-        for (Book book : books) {
-            if (book.getBookId() == bookId) {
-                return true;
-            }
-        }
-        return false;
+        return books.containsKey(bookId);
     }
 
     public void addBook(Book book) throws BookAlreadyExistsException {
+        if(book == null){
+            throw new IllegalArgumentException("Book cannot be null.");
+        }
         if(bookExists(book.getBookId())) {
             throw new BookAlreadyExistsException("Book with ID " + book.getBookId() + " already exists.");
         }
-        books.add(book);
+        
+        books.put(book.getBookId(), book);
     }
 
     public void removeBook(long bookId) throws BookNotFoundException {
         Book book = findBookById(bookId);
-            books.remove(book);    
+            books.remove(book.getBookId());    
         }
 
     public void displayBooks() {
@@ -39,7 +38,7 @@ public class LibraryService {
             System.out.println("No books available in the library.");
         } else {
             System.out.println("Books available in the library:");
-            for (Book book : books) {
+            for (Book book : books.values()) {
                 System.out.println(book);
             }
         }
@@ -47,23 +46,11 @@ public class LibraryService {
 
     public Book findBookById(long bookId) throws BookNotFoundException {
 
-        for (Book book : books) {
-            if (book.getBookId() == bookId) {
-                return book;
-            }
+        Book book = books.get(bookId);
+        if (book == null) {
+            throw new BookNotFoundException("Book with ID " + bookId + " not found.");
         }
-
-        throw new BookNotFoundException("Book with ID " + bookId + " not found.");
-    }
-
-    public void borrowBook(long bookId) throws BookNotFoundException, BookOperationException {
-        Book book = findBookById(bookId);
-            book.borrowBook();
-    }
-
-    public void returnBook(long bookId) throws BookNotFoundException, BookOperationException {
-        Book book = findBookById(bookId);
-            book.returnBook();
+        return book;
     }
 
 }
