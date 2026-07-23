@@ -47,7 +47,7 @@ public class BorrowAndReturnService {
     public BorrowRecord findBorrowRecord(long memberId, long bookId) throws BorrowRecordIsNotFound{
         String key = memberId + "-" + bookId;
         if(!(borrowRecord.containsKey(key))){
-            throw new BorrowRecordIsNotFound("Record not found")
+            throw new BorrowRecordIsNotFound("Record not found");
         }
         return borrowRecord.get(key);
     }
