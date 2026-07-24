@@ -3,6 +3,7 @@ package service;
 import exception.*;
 import model.Book;
 import model.BorrowRecord;
+import model.Member;
 
 import java.util.HashMap;
 
@@ -11,6 +12,7 @@ public class BorrowAndReturnService {
     private HashMap<String ,BorrowRecord> borrowRecord;
     private BookService bookService;
     private MemberService memberService;
+    
 
     public BorrowAndReturnService(BookService bookService, MemberService memberService){
         borrowRecord = new HashMap<>();
@@ -28,9 +30,7 @@ public class BorrowAndReturnService {
         if(!book.isAvailable()){
             throw new BookOperationException("No copies of this book are currently available.");
         }
-        if(!memberService.memberExists(record.getMemberId())){
-            throw new MemberNotFoundException("No member found with the given Id");
-        }
+        memberService.findMemberById(record.getMemberId());
         String key = record.getMemberId() + "-" + record.getBookId();
         if(borrowRecord.containsKey(key)){
             throw new BookAlreadyBorrowedException("You have already borrowed this book");
@@ -40,11 +40,17 @@ public class BorrowAndReturnService {
     }    
 
     public void displayBorrowRecord(){
+        if(borrowRecord.isEmpty()){
+            System.out.println("Their is no book Borrowed!");
+        }
         for(BorrowRecord record : borrowRecord.values()){
             System.out.println(record);
         }
     }
-    public BorrowRecord findBorrowRecord(long memberId, long bookId) throws BorrowRecordIsNotFound{
+    public BorrowRecord findBorrowRecord(long memberId, long bookId) throws BorrowRecordIsNotFound, MemberNotFoundException, BookNotFoundException{
+        memberService.findMemberById(memberId);
+        bookService.findBookById(bookId);
+
         String key = memberId + "-" + bookId;
         if(!(borrowRecord.containsKey(key))){
             throw new BorrowRecordIsNotFound("Record not found");
@@ -52,7 +58,10 @@ public class BorrowAndReturnService {
         return borrowRecord.get(key);
     }
 
-    public void returnBooks(long memberId, long bookId) throws BorrowRecordIsNotFound, BookOperationException, BookNotFoundException{
+    public void returnBooks(long memberId, long bookId) throws BorrowRecordIsNotFound, BookOperationException, BookNotFoundException, MemberNotFoundException{
+        memberService.findMemberById(memberId);
+        bookService.findBookById(bookId);
+
         String key = memberId + "-" + bookId;
         if(!(borrowRecord.containsKey(key))){
             throw new BorrowRecordIsNotFound("This book is not borrowed");

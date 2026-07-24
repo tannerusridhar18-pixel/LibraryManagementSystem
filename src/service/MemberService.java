@@ -24,6 +24,12 @@ public class MemberService {
         if(memberExists(member.getMemberId())){
             throw new MemberAlreadyExistException("Member of ID: " + member.getMemberId() + " already exist." );
         }
+        for(Member member3 : members.values()){
+            if(member3.getEmail().equalsIgnoreCase(member.getEmail())){
+                System.out.println("Member not added because");
+                throw new MemberAlreadyExistException("Member Email Already Exists");
+            }
+        }
         members.put(member.getMemberId(), member);
     }
 

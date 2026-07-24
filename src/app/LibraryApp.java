@@ -63,6 +63,7 @@ public class LibraryApp {
                         try {
                             Member mem = new Member(memberId, memberName, memberEmail, memberPhone);
                             memberService.addMember(mem);
+                            System.out.println("Member added successfully!");
                         } catch (IllegalArgumentException | MemberAlreadyExistException e) {
                             System.out.println(e.getMessage());
                         }
@@ -72,6 +73,7 @@ public class LibraryApp {
                         long memId = sc.nextLong();
                         try {
                             memberService.removeMember(memId);
+                            System.out.println("Member with Id: "+ memId + " is removed");
                         } catch (MemberNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
@@ -80,7 +82,7 @@ public class LibraryApp {
                         memberService.displayMembers();
                         break;
                     case 4:
-                        System.out.println("Enter Member ID: ");
+                        System.out.println("Enter Member ID to find: ");
                         long membId = sc.nextLong();
                         try {
                             Member mem1 = memberService.findMemberById(membId);
@@ -122,6 +124,7 @@ public class LibraryApp {
                         long removeBookId = sc.nextLong();
                         try{
                             library.removeBook(removeBookId);
+                            System.out.println("Book removed successfully");
                         } catch(BookNotFoundException e){
                             System.out.println(e.getMessage());
                         }
@@ -150,7 +153,7 @@ public class LibraryApp {
                         try {
                             bar.returnBooks(returnMemberId, returnBookId);
                             System.out.println("Book returned Successfully!");
-                        } catch (BorrowRecordIsNotFound | BookOperationException | BookNotFoundException e) {
+                        } catch (BorrowRecordIsNotFound | BookOperationException | BookNotFoundException | MemberNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
                         break;
@@ -175,7 +178,7 @@ public class LibraryApp {
                         try {
                             BorrowRecord br = bar.findBorrowRecord(borrowMemberId, borrowBookId);
                             System.out.println(br);
-                        } catch (BorrowRecordIsNotFound e) {
+                        } catch (BorrowRecordIsNotFound | MemberNotFoundException | BookNotFoundException e) {
                             System.out.println(e.getMessage());
                         }
                         break;
